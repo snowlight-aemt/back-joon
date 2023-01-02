@@ -19,14 +19,11 @@ public class Main {
         }
 
         List<String> orderedWords = words.stream()
-                .sorted((cur, prev) -> {
-                    return cur.length() - prev.length();
-                })
-                .sorted((cur, prev) -> {
-                    if (cur.length() == prev.length()) {
-                        return cur.compareTo(prev);
+                .sorted((s1, s2) -> {
+                    if (s1.length() == s2.length()) {
+                        return s1.compareTo(s2) ;
                     }
-                    return cur.length() - prev.length();
+                    return s1.length() - s2.length();
                 })
                 .collect(Collectors.toList());
 
@@ -38,5 +35,3 @@ public class Main {
         System.out.println(sb);
     }
 }
-
-
