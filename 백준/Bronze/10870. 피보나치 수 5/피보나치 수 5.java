@@ -7,22 +7,16 @@ public class Main {
         BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
         int count = Integer.parseInt(input.readLine()) + 1;
         int[] pArr = new int[count];
-        int result = 0;
-        for (int i = 0; i < count; i++) {
-            if (i < 2) {
-                pArr[i] = i;
-                continue;
-            }
+        
+        for (int i = 0; i < count; i++)
+            pArr[i] = p(pArr, i);
 
-            result = p(pArr, i);
-            pArr[i] = result;
-        }
         System.out.println(pArr[count - 1]);
     }
 
     public static int p(int[] numbers, int index) {
         if (index < 2)
-            return 1;
+            return index;
 
         return numbers[index-1] + numbers[index-2];
     }
