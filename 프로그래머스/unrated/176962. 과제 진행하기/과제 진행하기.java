@@ -19,34 +19,33 @@ class Solution {
         
 //[["science", "12:40", "50"], ["music", "12:20", "40"], ["history", "14:00", "30"],["computer", "12:30", "100"]]	["science", "history", "computer", "music"]
 // music computer science history
-
-// ["music",    "12:20", "40"]
-// ["computer", "12:30", "100"]
-// ["science",  "12:40", "50"]
-// ["history",  "14:00", "30"]
-
-
         for (int i = 0; i < plans.length; i++) {
             String[] curPlan = plans[i];
-            int additivityPlanEndTime = 0;
 
             while (!stack.empty()) {
                 String[] prevPlan = stack.pop();
-                int prevPlanEndTime = additivityPlanEndTime == 0 ? getMinute(prevPlan[1]) + Integer.parseInt(prevPlan[2]) : additivityPlanEndTime + Integer.parseInt(prevPlan[2]);
+            
+                int prevPlanEndTime = getMinute(prevPlan[1]) + Integer.parseInt(prevPlan[2]);
                 int curPlanStartTime = getMinute(curPlan[1]);
-                
+
+                // if (prevPlanEndTime == curPlanStartTime) {
+                //     answer[cnt++] = curPlan[0];
+                //     answer[cnt++] = prevPlan[0];
+                // } else if (prevPlanEndTime < curPlanStartTime) {
+                //     answer[cnt++] = prevPlan[0];
+                // } else {
+                //     prevPlan[2] = String.valueOf(prevPlanEndTime - curPlanStartTime);
+                //     stack.push(prevPlan);
+                //     break;
+                // }
 
                 if (prevPlanEndTime <= curPlanStartTime) {
                     answer[cnt++] = prevPlan[0];
-                    additivityPlanEndTime = prevPlanEndTime;
-                    // curPlanStartTime += getMinute(prevPlan[2]);
                 } else {
                     prevPlan[2] = String.valueOf(prevPlanEndTime - curPlanStartTime);
                     stack.push(prevPlan);
                     break;
                 }
-                // TODO 현재 시간이 필요..;
-                // 남는 시간에 시작된 작업을 다음 작업시간을 알기 위해서
             }
 
             stack.push(curPlan);
