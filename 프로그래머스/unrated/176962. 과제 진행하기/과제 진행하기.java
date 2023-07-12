@@ -1,7 +1,4 @@
 import java.io.IOException;
-import java.time.LocalTime;
-import java.util.ArrayDeque;
-import java.util.Queue;
 import java.util.Arrays;
 import java.util.Stack;
 
@@ -16,31 +13,23 @@ class Solution {
             return getMinute(c[1]) - getMinute(p[1]);
         });
 
-        
-//[["science", "12:40", "50"], ["music", "12:20", "40"], ["history", "14:00", "30"],["computer", "12:30", "100"]]	["science", "history", "computer", "music"]
-// music computer science history
         for (int i = 0; i < plans.length; i++) {
             String[] curPlan = plans[i];
+            int additivityPlanEndTime = 0;
 
             while (!stack.empty()) {
                 String[] prevPlan = stack.pop();
-            
-                int prevPlanEndTime = getMinute(prevPlan[1]) + Integer.parseInt(prevPlan[2]);
+                // TODO 약간 코드가 지저분하다.. 고민 중....
+                // 첫 작업 이후에는 다음 작업을 진행할 때 이전 작업(첫 작업...) 에서 사용한 시간을 계산해야 한다.
+                int prevPlanEndTime = additivityPlanEndTime == 0 
+                    ? getMinute(prevPlan[1]) + Integer.parseInt(prevPlan[2]) 
+                    : additivityPlanEndTime + Integer.parseInt(prevPlan[2]);
                 int curPlanStartTime = getMinute(curPlan[1]);
-
-                // if (prevPlanEndTime == curPlanStartTime) {
-                //     answer[cnt++] = curPlan[0];
-                //     answer[cnt++] = prevPlan[0];
-                // } else if (prevPlanEndTime < curPlanStartTime) {
-                //     answer[cnt++] = prevPlan[0];
-                // } else {
-                //     prevPlan[2] = String.valueOf(prevPlanEndTime - curPlanStartTime);
-                //     stack.push(prevPlan);
-                //     break;
-                // }
+                
 
                 if (prevPlanEndTime <= curPlanStartTime) {
                     answer[cnt++] = prevPlan[0];
+                    additivityPlanEndTime = prevPlanEndTime;
                 } else {
                     prevPlan[2] = String.valueOf(prevPlanEndTime - curPlanStartTime);
                     stack.push(prevPlan);
