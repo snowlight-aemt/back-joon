@@ -1,9 +1,9 @@
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
+
 
 class Solution {
     // [0, 1, 0] ["diamond", "iron", "iron", "iron", "iron", "diamond", "diamond", "iron", "iron", "iron"] 9 
@@ -43,22 +43,20 @@ class Solution {
             result.add(List.of(_d, _i, _s));
         }
 
-        List<List<Integer>> list = result.stream().sorted((o1, o2) -> {
-            return o2.get(2) - o1.get(2);
-        }).collect(Collectors.toList());
-        
-        for (int i = 0; i < list.size(); i++) {
+        Collections.sort(result, ((o1, o2) -> o2.get(2) - o1.get(2)));
+
+        for (int i = 0; i < result.size(); i++) {
             if (picks[0] > 0) {
                 picks[0]--;
-                answer += list.get(i).get(0);
+                answer += result.get(i).get(0);
 
             } else if (picks[1] > 0) {
                 picks[1]--;
-                answer += list.get(i).get(1);
+                answer += result.get(i).get(1);
 
             } else if (picks[2] > 0) {
                 picks[2]--;
-                answer += list.get(i).get(2);
+                answer += result.get(i).get(2);
                 
             }
         }
