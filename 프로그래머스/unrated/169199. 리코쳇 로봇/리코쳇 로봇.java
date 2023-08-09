@@ -1,4 +1,6 @@
-import java.util.Arrays;
+import java.io.IOException;
+import java.util.LinkedList;
+import java.util.Queue;
 
 class Solution {
     // 우, 좌, 하, 상
@@ -9,17 +11,18 @@ class Solution {
     int[] g_goal = new int[2];
     int g_start[] = new int[2];
     int g_answer = Integer.MAX_VALUE;
-    int g_visite[][];
+    boolean g_visite[][];
+    Queue<int[]> queue = new LinkedList<>();
 
     public int solution(String[] board) {
         g_boards = new String[board.length][];
         g_ySize = board.length;
         g_xSize = board[0].length();
 
-        g_visite = new int[g_ySize][g_xSize];
-        for (int[] ints : g_visite ) {
-            Arrays.fill(ints, Integer.MAX_VALUE);
-        }
+        g_visite = new boolean[g_ySize][g_xSize];
+        // for (int[] ints : g_visite ) {
+        //     Arrays.fill(ints, Integer.MAX_VALUE);
+        // }
 
         for (int i = 0; i < board.length; i++) {
             String[] x_pos = new String[g_xSize];
@@ -43,29 +46,37 @@ class Solution {
 
         int col = g_start[0];
         int row = g_start[1];
-        bfs(col, row, 0);
+        g_visite[row][col] = true;
+        dfs(col, row, 0);
 
         return g_answer == Integer.MAX_VALUE ? -1 : g_answer;
     }
 
-    private void bfs(int col, int row, int cnt) {
-        if (g_goal[0] == col && g_goal[1] == row) {
-            g_answer = Math.min(g_answer, cnt);
-            return;
-        }
+    private void dfs(int col, int row, int cnt) {
+        queue.add(new int[] {col, row, cnt});
 
-        for (int i = 0; i < g_directions.length; i++) {
+        while (!queue.isEmpty()) {
+            int[] q = queue.poll();
+            int qCol = q[0];
+            int qRow = q[1];
+            int qCnt = q[2];
 
-            int[] block = go(col, row, g_directions[i]);
-
-
-            if (g_visite[block[1]][block[0]] <= cnt + 1) {
-                continue;
+            if (g_goal[0] == qCol && g_goal[1] == qRow) {
+                g_answer = Math.min(g_answer, qCnt);
+                return;
             }
-
-            g_visite[block[1]][block[0]] = cnt + 1;
-
-            bfs(block[0], block[1], cnt + 1);
+    
+            for (int i = 0; i < g_directions.length; i++) {
+                int[] block = go(qCol, qRow, g_directions[i]);
+    
+    
+                if (g_visite[block[1]][block[0]]) {
+                    continue;
+                }
+    
+                g_visite[block[1]][block[0]] = true;
+                queue.add(new int[] {block[0], block[1], qCnt + 1});
+            }
         }
     }
 
