@@ -3,15 +3,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.time.Period;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 public class Main {
     static int g_w = 0;
@@ -36,36 +27,35 @@ public class Main {
         }
 
         repeat(0, 0, n);
+
         System.out.println(g_w);
         System.out.println(g_b);
     }
 
     public static void repeat(int x, int y, int size) {
-        int init = g_paper[y][x];
-        boolean isFlug = true;
-        for (int i = 0; i < size; i++) {;
+        if (check(x, y, size))
+            return;
+
+        int nSize = size/2;
+        repeat(x, y, nSize);
+        repeat(x+nSize, y, nSize);
+        repeat(x, y+nSize, nSize);
+        repeat(x+nSize, y+nSize, nSize);
+    }
+
+    public static boolean check(int x, int y, int size) {
+        int color = g_paper[y][x];
+        for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
-                if (g_paper[i+y][j+x] != init) {
-                    int nSize = size/2;
-                    isFlug = false;
-                    for (int k = 0; k < direction.length; k++) {
-                        // Arrays.copyOfRange(g_paper[0], (k*nSize), (k*nSize)+nSize);
-                        int nX = x + direction[k][0] * nSize;
-                        int nY = y + direction[k][1] * nSize;
-                        repeat(nX, nY, nSize);
-                    }
-                    
-                    if (isFlug == false)
-                        break;
+                if (g_paper[i+y][j+x] != color) {
+                    return false;
                 }
             }
-            if (isFlug == false)
-                break;
         }
-        
-        if (isFlug) {
-            if (init == 0) g_w++;
-            else if (init == 1) g_b++;
-        }
+
+        if (color == 0) g_w++;
+        else if (color == 1) g_b++;
+
+        return true;
     }
 }
