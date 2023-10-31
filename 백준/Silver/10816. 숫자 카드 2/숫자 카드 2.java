@@ -1,43 +1,79 @@
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
-public class Main
-{
+public class Main {
     public static void main(String[] args) throws IOException {
+        // File file = new File("test.txt");
+        // FileReader fileReader = new FileReader(file);
+        // BufferedReader input = new BufferedReader(new BufferedReader(fileReader));
         BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
 
         int n = Integer.parseInt(input.readLine());
-        String[] nNums = input.readLine().split(" ");
-        List<Integer> nArr = Arrays.stream(nNums)
-                .map(Integer::parseInt)
-                .sorted()
-                .collect(Collectors.toList());
+        int[] nDex = new int[n];
+        String[] nDexStr = input.readLine().split(" ");
+        for (int i = 0; i < nDexStr.length; i++) {
+            nDex[i] = Integer.parseInt(nDexStr[i]);
+        }
 
         int m = Integer.parseInt(input.readLine());
-        String[] mArr = input.readLine().split(" ");
-
-        Map<String, Integer> map = new HashMap<>();
-        for (String str : mArr) {
-            map.put(str, 0);
+        int[] mDex = new int[m];
+        String[] mDexStr = input.readLine().split(" ");
+        for (int i = 0; i < mDexStr.length; i++) {
+            mDex[i] = Integer.parseInt(mDexStr[i]);
         }
 
-        for (String key : nNums) {
-            Integer value = map.get(key);
-            if (value != null) {
-                map.put(key, ++value);
-            }
-        }
 
+        Arrays.sort(nDex);
         StringBuilder sb = new StringBuilder();
-        Arrays.stream(mArr).forEach(x -> {
-            sb.append(map.get(x)).append(' ');
-        });
+        for (int card : mDex) {
+            int a = lowerBound(card, nDex);
+            int b = upperBound(card, nDex);
+    
+            sb.append(b - a).append(' ');
+        }
         System.out.println(sb);
+    }
+
+    public static int lowerBound(int key, int[] dex) {
+        int lo = 0;
+        int hi = dex.length;
+
+        while (true) {
+            int idx = (lo + hi) / 2;
+            int mid = dex[idx];
+            if (key > mid)  {
+                lo = idx + 1;
+            } else {
+                hi = idx;
+            }
+
+            if (lo >= hi) 
+                break;
+        }
+
+        return lo;
+    }
+
+    public static int upperBound(int key, int[] dex) {
+        int lo = 0;
+        int hi = dex.length;
+
+        while (true) {
+            int idx = (lo + hi) / 2;
+            int mid = dex[idx];
+            if (key >= mid)  {
+                lo = idx + 1;
+            } else {
+                hi = idx;
+            }
+
+            if (lo >= hi) 
+                break;
+        }
+        return lo;
     }
 }
