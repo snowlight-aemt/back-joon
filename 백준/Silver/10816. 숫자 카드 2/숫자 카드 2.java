@@ -26,14 +26,13 @@ public class Main {
             mDex[i] = Integer.parseInt(mDexStr[i]);
         }
 
-
         Arrays.sort(nDex);
         StringBuilder sb = new StringBuilder();
         for (int card : mDex) {
-            int a = lowerBound(card, nDex);
-            int b = upperBound(card, nDex);
+            int lb = lowerBound(card, nDex);
+            int ub = upperBound(card, nDex);
     
-            sb.append(b - a).append(' ');
+            sb.append(ub - lb).append(' ');
         }
         System.out.println(sb);
     }
@@ -42,7 +41,7 @@ public class Main {
         int lo = 0;
         int hi = dex.length;
 
-        while (true) {
+        while (lo < hi) {
             int idx = (lo + hi) / 2;
             int mid = dex[idx];
             if (key > mid)  {
@@ -50,9 +49,6 @@ public class Main {
             } else {
                 hi = idx;
             }
-
-            if (lo >= hi) 
-                break;
         }
 
         return lo;
@@ -62,7 +58,7 @@ public class Main {
         int lo = 0;
         int hi = dex.length;
 
-        while (true) {
+        while (lo < hi) {
             int idx = (lo + hi) / 2;
             int mid = dex[idx];
             if (key >= mid)  {
@@ -70,9 +66,6 @@ public class Main {
             } else {
                 hi = idx;
             }
-
-            if (lo >= hi) 
-                break;
         }
         return lo;
     }
