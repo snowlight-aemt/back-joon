@@ -18,21 +18,23 @@ public class Main {
 
         long max = 0;
         long min = 0;
+        long mid = 0;
+        long sum = 0;
 
         int[] trees = new int[N];
         String[] treesStre = in.readLine().split(" ");
+
         for (int i = 0; i < trees.length; i++) {
             trees[i] = Integer.parseInt(treesStre[i]);
             if (max < trees[i]) {
                 max = trees[i];
             }
         }
-        long mid = 0;
-        long sum = 0;
+
+        max += 1;
         while (min < max) {
             sum = 0;
             mid = (min + max) / 2;
-            
 
             for (int i = 0; i < trees.length; i++) {
                 if (trees[i] - mid  <= 0) {
@@ -41,18 +43,12 @@ public class Main {
 
                 sum += (trees[i] - mid);
             }
-
-			if(sum < M) {
-				max = mid;
-			}
-			else {
-				min = mid + 1;
-			}
-            // if (M < sum) {
-            //     min = mid + 1;
-            // } else {
-            //     max = mid;
-            // }
+            
+            if (M <= sum) {
+                min = mid + 1;
+            } else {
+                max = mid;
+            }
         }
 
         System.out.println(max - 1);
